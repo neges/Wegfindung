@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>0250B104-8C32-4985-8C1B-354AE53E56AA</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Wegfindung</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>6E8E7B2B-B775-4D3B-B56D-54F2F47F7E2B</key>
+		<string>https://github.com/neges/Wegfindung.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Wegfindung.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>6E8E7B2B-B775-4D3B-B56D-54F2F47F7E2B</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/neges/Wegfindung.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>6E8E7B2B-B775-4D3B-B56D-54F2F47F7E2B</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>6E8E7B2B-B775-4D3B-B56D-54F2F47F7E2B</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Wegfindung</string>
+		</dict>
+	</array>
+</dict>
+</plist>

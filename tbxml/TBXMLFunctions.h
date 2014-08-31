@@ -55,5 +55,11 @@
 				 withValue:(char*)aValue
 				 toElement:(TBXMLElement*)aElement;
 
++(void)getAllNextNodesFromElement:(TBXMLElement*)element
+                          toArray:(NSMutableArray *)elementArray;
+
++(TBXMLElement*) getElement:(TBXMLElement*)element
+                       ByID:(NSString*) elementID;
+
 
 @end

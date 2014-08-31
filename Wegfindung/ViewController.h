@@ -17,6 +17,7 @@
 	NSString* documentsDir; //Pfad zum dokumenten ordner
 
 	TBXML* structureXML; //structureXML
+    TBXMLElement* rootElement;
 	
 	
 }

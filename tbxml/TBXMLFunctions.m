@@ -577,6 +577,80 @@
 }
 
 
++(TBXMLElement*) getElement:(TBXMLElement*)element
+					 ByID:(NSString*) elementID
+{
+	
+	do{
+		
+		
+		TBXMLAttribute *attribute = element->firstAttribute;
+		
+		while (attribute)
+		{
+            
+			if ([[TBXML attributeValue:attribute] isEqualToString:elementID] && [[TBXML attributeName:attribute] isEqualToString:@"id"])
+			{
+				return element;
+			}
+			
+			attribute = attribute->next;
+			
+		}
+		
+		if (element->firstChild)
+		{
+            
+            if ([[TBXMLFunctions getTypeOfElement:element->firstChild] isEqualToString:@"node"])
+            {
+                TBXMLElement* tempElement = [self getElement:element->firstChild ByID:elementID];
+                if (tempElement) {
+                    return tempElement;
+                }
+            }
+
+		}
+		
+		
+	}while ((element = element->nextSibling));
+	
+	return nil;
+	
+	
+}
+
+
++(void)getAllNextNodesFromElement:(TBXMLElement*)element
+                  toArray:(NSMutableArray *)elementArray
+{
+	
+    [elementArray removeAllObjects];
+    
+    TBXMLElement* childs = element->firstChild;
+	
+	if (childs)
+	{
+		do
+		{
+			
+			if ([[TBXMLFunctions elementName:childs] isEqualToString:@"next"])
+            {
+                NSMutableArray* tempArray = [[NSMutableArray alloc]init];
+                
+                [tempArray addObject: [TBXMLFunctions getAttribute:@"id" OfElement:childs]];
+                [tempArray addObject: [TBXMLFunctions getAttribute:@"cost" OfElement:childs]];
+                
+                [elementArray addObject:tempArray];
+                
+                
+            }
+			
+		}while ((childs = childs->nextSibling));
+	}
+	
+}
+
+
 
 
 #pragma mark -

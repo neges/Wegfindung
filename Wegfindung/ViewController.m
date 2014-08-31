@@ -52,24 +52,58 @@
 	
 	//xml laden falls vorhanden
 	structureXML = [TBXML newTBXMLWithXMLString:theContents error:nil];
-	TBXMLElement* rootElement = structureXML.rootXMLElement;
+	rootElement = structureXML.rootXMLElement;
 	
 	if (!structureXML) {
 		NSLog(@"No structur file could be found or structur file i incorrect : %@", fullPath);
 		return;
 	}
 	
-	NSString* rootElementName = [TBXMLFunctions getTypeOfElement:rootElement];
-	
-	NSLog(@"%@",rootElementName);
-	
-	
-	
-    
+    NSMutableArray* route = [[NSMutableArray alloc]init];
+    [route addObject:<#(id)#>]
+    [self routeFromNodeID:@"1" to:@"6" returnedRoute:route];
+    NSLog(@"%@",route);
     
 	
+
 	
 }
+
+-(void) routeFromNodeID:(NSString*)startID
+                     to:(NSString*)endID
+          returnedRoute:(NSMutableArray*)rRoute
+{
+
+    NSMutableArray* nextNodes = [[NSMutableArray alloc]init];
+    
+    [TBXMLFunctions getAllNextNodesFromElement:[TBXMLFunctions getElement:rootElement ByID:startID] toArray:nextNodes];
+    
+	for (NSMutableArray* nextNode in nextNodes) //Prüfen ob wir schon durch sind
+    {
+        if ([[nextNode objectAtIndex:0] isEqualToString:endID])
+        {
+            
+            return[nextNode objectAtIndex:1];
+        }
+    }
+    for ( NSMutableArray* nextNode in nextNodes) //nicht druch als nochmal durchlaufen und selber aufrufen
+    {
+        int costs = [[self routeFromNodeID:[nextNode objectAtIndex:0]to:endID]integerValue];
+        int sumCosts = [[nextNode objectAtIndex:1]integerValue] + costs;
+        return [NSString stringWithFormat:@"%i", sumCosts];
+        
+        
+    }
+    
+
+
+    return nil;
+    
+
+}
+
+
+
 
 
 @end
