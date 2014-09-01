@@ -59,48 +59,159 @@
 		return;
 	}
 	
-    NSMutableArray* route = [[NSMutableArray alloc]init];
-    [route addObject:<#(id)#>]
-    [self routeFromNodeID:@"1" to:@"6" returnedRoute:route];
-    NSLog(@"%@",route);
-    
+	NSMutableArray* route = [[NSMutableArray alloc]init];
 	
+    route = [self routeFromNodeID:@"1" to:@"8"];
+    
+	NSLog(@"Route : %@", route);
 
 	
 }
 
--(void) routeFromNodeID:(NSString*)startID
-                     to:(NSString*)endID
-          returnedRoute:(NSMutableArray*)rRoute
+-(NSMutableArray*) routeFromNodeID:(NSString*)startID
+								to:(NSString*)endID
 {
 
-    NSMutableArray* nextNodes = [[NSMutableArray alloc]init];
+	NSMutableArray* possibleRoute = [[NSMutableArray alloc]init];
+	
+	NSMutableArray* currentBestRoute = [[NSMutableArray alloc]init];
+	[currentBestRoute addObject:startID];
+	[currentBestRoute addObject:@"-1"];
+	
+	NSMutableArray* nextNodes = [[NSMutableArray alloc]init];
     
     [TBXMLFunctions getAllNextNodesFromElement:[TBXMLFunctions getElement:rootElement ByID:startID] toArray:nextNodes];
     
-	for (NSMutableArray* nextNode in nextNodes) //Prüfen ob wir schon durch sind
+	for ( NSMutableArray* nextNode in nextNodes)
     {
-        if ([[nextNode objectAtIndex:0] isEqualToString:endID])
-        {
-            
-            return[nextNode objectAtIndex:1];
-        }
+		if ([[nextNode objectAtIndex:0] isEqualToString:endID]) //falls schon am Ende dann zurückgeben
+		{
+			return nextNode;
+		}
+		
+		//nächste ID hinzufügen - hier müssen wir aus der ID eine Array für später machen
+		NSMutableArray* tempNodeArray = [[NSMutableArray alloc]init];
+		[tempNodeArray addObject:startID];
+		[tempNodeArray addObject:[nextNode objectAtIndex:0]];
+		
+		NSMutableArray* tempNode = [[NSMutableArray alloc]init];
+		[tempNode addObject:tempNodeArray];//temporäres Array speichern
+		[tempNode addObject:[nextNode objectAtIndex:1]];//Kosten speichern
+		
+		[possibleRoute addObject:tempNode];
+		
+
     }
-    for ( NSMutableArray* nextNode in nextNodes) //nicht druch als nochmal durchlaufen und selber aufrufen
-    {
-        int costs = [[self routeFromNodeID:[nextNode objectAtIndex:0]to:endID]integerValue];
-        int sumCosts = [[nextNode objectAtIndex:1]integerValue] + costs;
-        return [NSString stringWithFormat:@"%i", sumCosts];
-        
-        
-    }
-    
-
-
-    return nil;
-    
-
+	
+	//falls nicht am Ende, dann eine ebene tiefer
+	[self calculateNextNodeLevelFrom:possibleRoute withCurrentBestRoute:currentBestRoute toEndID:endID];
+	
+	return [currentBestRoute objectAtIndex:0];
+	
+	
+	
 }
+
+
+-(NSMutableArray*)calculateNextNodeLevelFrom:(NSMutableArray*)currentNodes
+						withCurrentBestRoute:(NSMutableArray*)currentBestRoute
+									 toEndID:(NSString*)endID
+
+{
+	NSMutableArray* nextNodesForCurrentNode = [[NSMutableArray alloc]init];
+	NSMutableArray* nextPossibleNotes = [[NSMutableArray alloc]init];
+		
+	for (NSMutableArray* currentNode in currentNodes)
+    {
+		NSString* lastID = [[currentNode objectAtIndex:0]objectAtIndex:[[currentNode objectAtIndex:0]count]-1];
+		
+		[TBXMLFunctions getAllNextNodesFromElement:[TBXMLFunctions getElement:rootElement ByID:lastID] toArray:nextNodesForCurrentNode];
+		
+		for (NSMutableArray* nextNodeForCurrentNode in nextNodesForCurrentNode)
+		{
+			NSMutableArray* tempArray = [[NSMutableArray alloc]init];
+			
+			//Kosten zusammenfassen
+			CGFloat costs = [[currentNode objectAtIndex:1]floatValue] + [[nextNodeForCurrentNode objectAtIndex:1]floatValue];
+			
+			//Prüfen ob wir am Ende sind
+			if ([[nextNodeForCurrentNode objectAtIndex:0] isEqualToString:endID]) //falls schon am Ende dann zurückgeben
+			{
+				//Prüfen ob Kosten kleiner sind, also der Weg bessern
+				if (costs < [[currentBestRoute objectAtIndex:1]floatValue] || [[currentBestRoute objectAtIndex:1]floatValue] < 0)
+				{
+					//bis dato beste route löschen
+					[currentBestRoute removeAllObjects];
+					
+					//nächste ID hinzufügen
+					[tempArray addObjectsFromArray:[currentNode objectAtIndex:0]];
+					[tempArray addObject:[nextNodeForCurrentNode objectAtIndex:0]];
+					[currentBestRoute addObject:tempArray];
+					
+					//Kosten speichern
+					[currentBestRoute addObject:[NSString stringWithFormat:@"%f",costs]];
+				}//sonst nicht speichern
+				
+				
+			}else{//wenn nicht am ende, dann speichern
+				
+				//prüfen ob ID bereits verwendet wurde => rücklauf oder wenn Kosten bereits größer als aktuell beste Route
+				bool stepOver = false;
+				for (NSString* currentID in [currentNode objectAtIndex:0])
+				{
+					//Rücklauf
+					if ([currentID isEqualToString:[nextNodeForCurrentNode objectAtIndex:0]])
+					{
+						stepOver = true;
+						break;
+					}
+					
+					//Kosten
+					if (costs > [[currentBestRoute objectAtIndex:1]floatValue] && [[currentBestRoute objectAtIndex:1]floatValue] > 0)
+					{
+						stepOver = true;
+						break;
+					}
+					
+					
+				}
+				
+				if (stepOver == false) //nicht vorhanden also abspeichern
+				{
+					NSMutableArray* tempNode = [[NSMutableArray alloc]init];
+					
+					//nächste ID hinzufügen
+					[tempArray addObjectsFromArray:[currentNode objectAtIndex:0]];
+					[tempArray addObject:[nextNodeForCurrentNode objectAtIndex:0]];
+					[tempNode addObject:tempArray];
+					
+					//Kosten speichern
+					[tempNode addObject:[NSString stringWithFormat:@"%f",costs]];
+					
+					//tempNode speichern
+					[nextPossibleNotes addObject:tempNode];
+				}
+
+				
+			
+			}
+			
+			
+			
+		}
+		
+    }
+	
+	if ([nextPossibleNotes count]>0)
+	{
+		[self calculateNextNodeLevelFrom:nextPossibleNotes withCurrentBestRoute:currentBestRoute toEndID:endID];
+	}
+		
+	
+	
+	return currentBestRoute;
+}
+
 
 
 
