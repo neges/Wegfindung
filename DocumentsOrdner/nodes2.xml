@@ -3,45 +3,41 @@
 	<node id="1" x="1" y="1">
 		<next id="2" cost="1"/>
 		<next id="3" cost="1"/>
-		<next id="5" cost="2"/>
+		<next id="5" cost="4"/>
 	</node>
 	<node id="2" x="1" y="2">
 		<next id="1" cost="1"/>
 		<next id="4" cost="1"/>
-		<next id="6" cost="2"/>
-		<next id="5" cost="1"/>
-		<next id="3" cost="2"/>
+		<next id="6" cost="4"/>
+		<next id="3" cost="4"/>
 	</node>
 	<node id="3" x="2" y="1">
 		<next id="1" cost="1"/>
 		<next id="5" cost="1"/>
-		<next id="2" cost="2"/>
+		<next id="2" cost="4"/>
 	</node>
 	<node id="4" x="1" y="3">
-		<next id="6" cost="1"/>
 		<next id="2" cost="1"/>
-		<next id="5" cost="2"/>
+		<next id="5" cost="4"/>
 		<next id="7" cost="1"/>
-		<next id="8" cost="8"/>
+		<next id="8" cost="1"/>
 	</node>
 	<node id="5" x="2" y="2">
 		<next id="6" cost="1"/>
 		<next id="3" cost="1"/>
-		<next id="1" cost="2"/>
-		<next id="2" cost="1"/>
-		<next id="4" cost="2"/>
+		<next id="1" cost="4"/>
+		<next id="4" cost="4"/>
 	</node>
 	<node id="6" x="2" y="3">
-		<next id="4" cost="1"/>
 		<next id="5" cost="1"/>
-		<next id="2" cost="2"/>
+		<next id="2" cost="4"/>
 		<next id="8" cost="1"/>
 	</node>
 	<node id="7" x="1" y="4">
 		<next id="4" cost="1"/>
 	</node>
 	<node id="8" x="2" y="4">
-		<next id="4" cost="8"/>
+		<next id="4" cost="1"/>
 		<next id="6" cost="1"/>
 	</node>
 	

@@ -36,7 +36,7 @@
 	NSMutableArray* route = [[NSMutableArray alloc]init];
 	
 	NSLog(@"Start Calculation");
-    route = [self routeFromNodeID:@"1" to:@"6"];
+    route = [self routeFromNodeID:@"1" to:@"55"];
 	NSLog(@"Route : %@", route);
 	
 	
@@ -170,38 +170,41 @@
 			}else{//wenn nicht am ende, dann speichern
 				
 				//Optimierungen
-				//prüfen ob ID bereits verwendet wurde => rücklauf ODER wenn Kosten bereits größer als aktuell beste Route ODER wenn wir bereits einen kürzeren Weg zum aktuellen Knoten kennen
+				//1. prüfen ob ID bereits verwendet wurde => rücklauf
+				//2. wenn Kosten bereits größer als aktuell beste Route
+				//3. wenn wir bereits einen kürzeren Weg zum aktuellen Knoten kennen
 				bool stepOver = false;
+				
+				//Rücklauf
 				for (NSString* currentID in [currentNode objectAtIndex:0])
 				{
-					//Rücklauf
+					
 					if ([currentID isEqualToString:[nextNodeForCurrentNode objectAtIndex:0]])
 					{
 						stepOver = true;
 						break;
 					}
+				}
 					
-					//Kosten
-					if (costs > [[currentBestRoute objectAtIndex:1]floatValue] && [[currentBestRoute objectAtIndex:1]floatValue] > 0)
-					{
-						stepOver = true;
-						break;
-					}
-					
-					//kürzerer Weg
-					if (costs >= [[nodeIDs objectAtIndex:[currentID intValue]]floatValue] && [[nodeIDs objectAtIndex:[currentID intValue]]floatValue] > 0)
-					{
-						stepOver = true;
-						break;
-					}else{
-						[nodeIDs setObject:[NSString stringWithFormat:@"%f",costs] atIndexedSubscript:[currentID intValue]];
-					}
-					
-					
+				//Kosten
+				if (costs > [[currentBestRoute objectAtIndex:1]floatValue] && [[currentBestRoute objectAtIndex:1]floatValue] > 0)
+				{
+					stepOver = true;
 				}
 				
+				//kürzerer Weg
+				if (costs >= [[nodeIDs objectAtIndex:[[nextNodeForCurrentNode objectAtIndex:0] intValue]]floatValue] && [[nodeIDs objectAtIndex:[[nextNodeForCurrentNode objectAtIndex:0] intValue]]floatValue] > 0)
+				{
+					stepOver = true;
+				}else{
+					[nodeIDs setObject:[NSString stringWithFormat:@"%f",costs] atIndexedSubscript:[[nextNodeForCurrentNode objectAtIndex:0] intValue]];
+				}
+					
+					
+
+				
 				//neuer sinnvoller Knoten, also abspeichern
-				if (stepOver == false) 
+				if (stepOver == false)
 				{
 					NSMutableArray* tempNode = [[NSMutableArray alloc]init];
 					
