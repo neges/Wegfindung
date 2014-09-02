@@ -19,6 +19,7 @@
 	TBXML* structureXML; //structureXML
     TBXMLElement* rootElement;
 	
+	NSMutableArray* nodeIDs;
 	
 }
 

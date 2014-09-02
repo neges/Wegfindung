@@ -26,7 +26,18 @@
 	//ohne DocumentsOrdner
 	documentsDir = [[NSBundle mainBundle] resourcePath];
 	
-	[self loadNodeList:@"DocumentsOrdner"];
+	//Knoten laden
+	if ([self loadNodeList:@"DocumentsOrdner"] == false)
+		return;
+	
+	
+	
+	//Route berechnen
+	NSMutableArray* route = [[NSMutableArray alloc]init];
+	
+	NSLog(@"Start Calculation");
+    route = [self routeFromNodeID:@"1" to:@"6"];
+	NSLog(@"Route : %@", route);
 	
 	
 }
@@ -39,7 +50,7 @@
 
 
 
-- (void)loadNodeList:(NSString *)oFolder
+- (bool)loadNodeList:(NSString *)oFolder
 
 {
 	
@@ -56,15 +67,18 @@
 	
 	if (!structureXML) {
 		NSLog(@"No structur file could be found or structur file i incorrect : %@", fullPath);
-		return;
+		return false;
 	}
 	
-	NSMutableArray* route = [[NSMutableArray alloc]init];
+	//Array mit der anzahl der Ids erstellen um später für jede ID den kürzestens Weg bis dato zu speichern
+	nodeIDs = [[NSMutableArray alloc]init];
+	int nodeCount = [TBXMLFunctions getCountOfChildsFromElement:rootElement];
+	for (int i = 0; i <= nodeCount; i++)
+	{
+		[nodeIDs addObject:@"-1"];
+	}
 	
-    route = [self routeFromNodeID:@"1" to:@"8"];
-    
-	NSLog(@"Route : %@", route);
-
+	return true;
 	
 }
 
@@ -155,7 +169,7 @@
 				
 			}else{//wenn nicht am ende, dann speichern
 				
-				//prüfen ob ID bereits verwendet wurde => rücklauf oder wenn Kosten bereits größer als aktuell beste Route
+				//prüfen ob ID bereits verwendet wurde => rücklauf ODER wenn Kosten bereits größer als aktuell beste Route ODER wenn wir bereits einen kürzeren Weg zum aktuellen Knoten kennen
 				bool stepOver = false;
 				for (NSString* currentID in [currentNode objectAtIndex:0])
 				{
@@ -171,6 +185,15 @@
 					{
 						stepOver = true;
 						break;
+					}
+					
+					//kürzerer Weg
+					if (costs >= [[nodeIDs objectAtIndex:[currentID intValue]]floatValue] && [[nodeIDs objectAtIndex:[currentID intValue]]floatValue] > 0)
+					{
+						stepOver = true;
+						break;
+					}else{
+						[nodeIDs setObject:[NSString stringWithFormat:@"%f",costs] atIndexedSubscript:[currentID intValue]];
 					}
 					
 					

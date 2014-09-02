@@ -15,6 +15,26 @@
 #pragma mark tbxml Methodes
 #pragma mark -
 
++(int)getCountOfChildsFromElement:(TBXMLElement*)element
+{
+	TBXMLElement* childs = element->firstChild;
+	int count = 0;
+	
+	
+	if (childs)
+	{
+		do
+		{
+			count = count + 1;
+			
+		}while ((childs = childs->nextSibling));
+	}
+	
+	return count;
+	
+}
+
+
 +(TBXMLElement*) getElement:(TBXMLElement*)element
 					 ByName:(NSString*) elementName
 {
@@ -626,6 +646,9 @@
 	
     [elementArray removeAllObjects];
     
+	if (element == nil)
+		return;
+	
     TBXMLElement* childs = element->firstChild;
 	
 	if (childs)

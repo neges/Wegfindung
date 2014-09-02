@@ -6,15 +6,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Wegfindung/ViewController.m"
-            timestampString = "431283216.51159"
+            timestampString = "431340570.883459"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "175"
-            endingLineNumber = "175"
+            startingLineNumber = "196"
+            endingLineNumber = "196"
             landmarkName = "-calculateNextNodeLevelFrom:withCurrentBestRoute:toEndID:"
             landmarkType = "5">
          </BreakpointContent>

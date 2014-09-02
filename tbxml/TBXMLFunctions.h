@@ -10,6 +10,7 @@
 
 @interface TBXMLFunctions : TBXML
 
++(int)getCountOfChildsFromElement:(TBXMLElement*)element;
 
 +(TBXMLElement*) getElement:(TBXMLElement*)element
 					 ByName:(NSString*) elementName;
