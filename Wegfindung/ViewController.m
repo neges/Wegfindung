@@ -169,6 +169,7 @@
 				
 			}else{//wenn nicht am ende, dann speichern
 				
+				//Optimierungen
 				//prüfen ob ID bereits verwendet wurde => rücklauf ODER wenn Kosten bereits größer als aktuell beste Route ODER wenn wir bereits einen kürzeren Weg zum aktuellen Knoten kennen
 				bool stepOver = false;
 				for (NSString* currentID in [currentNode objectAtIndex:0])
@@ -199,7 +200,8 @@
 					
 				}
 				
-				if (stepOver == false) //nicht vorhanden also abspeichern
+				//neuer sinnvoller Knoten, also abspeichern
+				if (stepOver == false) 
 				{
 					NSMutableArray* tempNode = [[NSMutableArray alloc]init];
 					
